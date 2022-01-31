@@ -6,22 +6,21 @@
 #include "arbre.h"
 
 //create empty tree
-TArbre arbreConsVide(void){
+TArbre arbreConsVide(){
     TArbre empty;
+    empty=malloc(sizeof(TArbre));
     return empty;
 }
 //test if the tree is empty or not
 int arbreEstVide(TArbre a){
-    if(a.data==NULL && a.left==NULL && a.right==NULL ){
+    if(a==arbreConsVide())
         return 1;
-    }
-    else{
-        return 0;
-    }
+    return 0;
 }
 //create a tree 
 TArbre arbreCons(char c, int n, TArbre* fg, TArbre* fd){
     TArbre arbre;
+    arbre=malloc(sizeof(TArbre));
     arbre.data=c;
     arbre.nbOcc=n;
     arbre.right=fg;
@@ -51,5 +50,9 @@ TArbre* arbreFilsDroit(TArbre* a){
 
 //delete tree
 void arbreSuppr(TArbre* a){
-    free(a);
+    if(!arbreEstVide(a)){
+        arbreSuppr(a->left);
+        arbreSuppr(a->right);
+        free(a);
+    }
 }

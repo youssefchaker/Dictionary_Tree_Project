@@ -4,60 +4,57 @@
 #include <string.h>
 
 #include "dico.h"
+#include "arbre.h"
 
-
+//print the entire dictionary
 void dicoAfficher(TArbre* a){
     dicoAfficher(a->left);
     printf("%s ", a->data);
     dicoAfficher(a->right);
 }
+//get the number of different words 
+int dicoNbMotsDifferents(TArbre a){}
 
-int piocherMot(char *motPioche)
-{
-FILE* dico = NULL; 
-int nombreMots = 0, numMotChoisi = 0, i = 0;
-int caractereLu = 0;
-dico = fopen("dico.txt", "r"); // On ouvre le dictionnaire en lecture seule
+//get the total number of words
+int dicoNbMotsTotal(TArbre a){}
 
-// On vérifie si on a réussi à ouvrir le dictionnaire
-if (dico == NULL) // Si on n'a PAS réussi à ouvrir le fichier
-{
-    printf("\nImpossible de charger le dictionnaire de mots");
-    return 0; // On retourne 0 pour indiquer que la fonction a échoué
-    // À la lecture du return, la fonction s'arrête immédiatement.
-}
-// On compte le nombre de mots dans le fichier (il suffit de compter les entrées \n
-do
-{
-    caractereLu = fgetc(dico);
-    if (caractereLu == '\n')
-        nombreMots++;
-    } while(caractereLu != EOF);
-numMotChoisi = nombreAleatoire(nombreMots); // On pioche un mot au hasard
-// On recommence à lire le fichier depuis le début. On s'arrête lorsqu'on est arrivé au bonmot
-rewind(dico);
-while (numMotChoisi > 0)
-{
-    caractereLu = fgetc(dico);
-    if (caractereLu == '\n')
-        numMotChoisi--;
-}
-/* Le curseur du fichier est positionné au bon endroit.
-On n'a plus qu'à faire un fgets qui lira la ligne */
-fgets(motPioche, 100, dico);
+//insert a word in the dictionary
+/*void dicoInsererMot(char mot[], TArbre *dico){
+    if(dico == NULL) return arbreConsVide();
+  if(mot[0] == '\0') return (dico->data == '\0')?dico:arbreCons('\0',1,NULL,dico);
+  if(mot[0] < dico->data) return arbreCons(mot[0]0,, new_dico(mot+1), dico);
+  if(mot[0] == dico->data){
+    dico->gauche = ajoute_dans_dico(mot+1, dico->gauche);
+    return dico;
+  }
+  dico->droite = ajoute_dans_dico(mot, dico->droite);
+  return dico;
+}*/
 
-// On vire le \n à la fin
-// On vire le \n à la fin
-motPioche[strlen(motPioche) - 1] = '\0';
-fclose(dico);
+//get the number of occurences in the dictionary
+int dicoNbOcc(char mot[], TArbre dico){
+    if(!est_dans_dico(mot,dico))
+        printf("the word is not in the dictionary");
+    
+}
 
-return 1; // Tout s'est bien passé, on retourne 1
+//check if the word is in the dictionary
+int est_dans_dico(char *mot, Tarbre dico){
+  if((dico == NULL)||(dico->data > mot[0])) return 0;
+  if(mot[0] == dico->data){
+    if(mot[0] == '\0') return 1;
+    return est_dans_dico(mot+1, dico->gauche);
+  }
+  return est_dans_dico(mot, dico->droite);
 }
-int nombreAleatoire(int nombreMax)
-{
-srand(time(NULL));
-return (rand() % nombreMax);
-}
+
+/*Tarbre new_dico(char *mot){
+  if(mot[0] == '\0') return noeud('\0',NULL,NULL);
+  return noeud(mot[0],new_dico(mot+1),NULL);
+}*/
+
+
+
 
 
  
