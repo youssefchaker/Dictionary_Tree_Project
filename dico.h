@@ -1,7 +1,9 @@
 #ifndef DEF_DICO
 #define DEF_DICO
-#include "manipDicc.h"
 #include "arbreStruct.c"
+
+int piocherMot(char *motPioche);
+int nombreAleatoire(int nombreMax);
 
 void dicoAfficher(TArbre a);
 int dicoNbMotsDifferents(TArbre a);
