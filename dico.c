@@ -64,24 +64,31 @@ int piocherMot(char *motPioche)
 }
 
 
-//YOUSSEF
+
 
 //insert a word in the dictionary
-/*void dicoInsererMot(char mot[], TArbre *dico){
-    if(dico == NULL) return arbreConsVide();
-  if(mot[0] == '\0') return (dico->data == '\0')?dico:arbreCons('\0',1,NULL,dico);
-  if(mot[0] < dico->data) return arbreCons(mot[0]0,, new_dico(mot+1), dico);
-  if(mot[0] == dico->data){
-    dico->gauche = ajoute_dans_dico(mot+1, dico->gauche);
-    return dico;
+void dicoInsererMot(char mot[], TArbre *a){
+  if(dicoNbOcc(mot, a) == 0)
+    dicoInsererNouvMot(mot,a);
+  else
+    dicoNbOccAdd(mot,a);
+
+}
+void dicoInsererNouvMot(char mot[], TArbre *a){
+    if(a == NULL) return arbreConsVide();
+  if(mot[0] == '\0') return (a->data == '\0')?a:arbreCons('\0',1,NULL,a);
+  if(mot[0] < a->data) return arbreCons(mot[0],0, dicoBranche(mot+1), a);
+  if(mot[0] == a->data){
+    a->gauche = ajoute_dans_dico(mot+1, a->gauche);
+    return a;
   }
-  dico->droite = ajoute_dans_dico(mot, dico->droite);
-  return dico;
-}*/
-/*Tarbre new_dico(char *mot){
-  if(mot[0] == '\0') return noeud('\0',NULL,NULL);
-  return noeud(mot[0],new_dico(mot+1),NULL);
-}*/
+  a->droite = ajoute_dans_dico(mot, a->droite);
+  return a;
+}
+Tarbre dicoBranche(char *mot){
+  if(mot[0] == '\0') return arbreCons('\0',1,NULL,NULL);
+  return arbreCons(mot[0],0,dicoBranche(mot+1),NULL);
+}
 
 /* ***************************************************************************************************************** */
 
