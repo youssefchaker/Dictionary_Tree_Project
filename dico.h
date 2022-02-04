@@ -1,6 +1,6 @@
 #ifndef DEF_DICO
 #define DEF_DICO
-#include "arbreStruct.c"
+#include "arbre.h"
 
 int piocherMot(char *motPioche);
 int nombreAleatoire(int nombreMax);
