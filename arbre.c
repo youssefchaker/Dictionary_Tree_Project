@@ -6,36 +6,36 @@
 #include "arbre.h"
 
 //create empty tree
-TArbre arbreConsVide(){
-    TArbre empty;
-    empty=malloc(sizeof(TArbre));
+TArbre* arbreConsVide(){
+    TArbre* empty;
+    empty = (TArbre*) malloc(sizeof(TArbre));
     return empty;
 }
 //test if the tree is empty or not
-int arbreEstVide(TArbre a){
-    if(a==arbreConsVide())
+int arbreEstVide(TArbre* a){
+    if(a == arbreConsVide())
         return 1;
     return 0;
 }
 //create a tree 
-TArbre arbreCons(char c, int n, TArbre* fg, TArbre* fd){
-    TArbre arbre;
-    arbre=malloc(sizeof(TArbre));
-    arbre.data=c;
-    arbre.nbOcc=n;
-    arbre.right=fg;
-    arbre.left=fd;
+TArbre* arbreCons(char c, int n, TArbre* fg, TArbre* fd){
+    TArbre* arbre;
+    arbre = (TArbre*)malloc(sizeof(TArbre));
+    arbre->data=c;
+    arbre->nbOcc=n;
+    arbre->right=fg;
+    arbre->left=fd;
     return arbre;
 }
 
 //retrun node data
-char arbreRacineLettre(TArbre a){
-    return a.data;
+char arbreRacineLettre(TArbre* a){
+    return a->data;
 }
 
 //return nb occ
-int arbreRacineNbOcc(TArbre a){
-    return a.nbOcc;
+int arbreRacineNbOcc(TArbre* a){
+    return a->nbOcc;
 }
 
 //return left tree node

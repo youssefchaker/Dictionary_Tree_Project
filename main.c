@@ -7,10 +7,11 @@
 
 int main(int argc, char* argv[]){
     char motPioche[100] = {0};
-    long coupsRestants;
-    long tailleMot = 0,i = 0;
+    int coupsRestants;
+    long tailleMot = 0;
     char *buffer = NULL;
-    TArbre dico;
+    TArbre* dico;
+
     printf("Bienvenue dans Notre Dictionnaire !\n\n");
     printf("Combien de mot à piocher ? !\n\n");
     scanf("%d",&coupsRestants);
@@ -26,9 +27,9 @@ int main(int argc, char* argv[]){
         tailleMot = strlen(motPioche);
         buffer = malloc(tailleMot * sizeof(char));
         strcpy(buffer, motPioche);
-        dicoInsererMot(buffer, &dico);
+        dicoInsererMot(buffer, dico);
         dicoAfficher(dico);
-        dicoNbOcc(motPioche,dico));
+        dicoNbOcc(motPioche,dico);
         printf("\n");
     }
 }
