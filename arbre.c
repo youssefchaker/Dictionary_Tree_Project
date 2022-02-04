@@ -23,8 +23,8 @@ TArbre* arbreCons(char c, int n, TArbre* fg, TArbre* fd){
     arbre = (TArbre*)malloc(sizeof(TArbre));
     arbre->data=c;
     arbre->nbOcc=n;
-    arbre->right=fg;
-    arbre->left=fd;
+    arbre->droite=fg;
+    arbre->gauche=fd;
     return arbre;
 }
 
@@ -40,19 +40,19 @@ int arbreRacineNbOcc(TArbre* a){
 
 //return left tree node
 TArbre* arbreFilsGauche(TArbre* a){
-    return a->left;
+    return a->gauche;
 }
 
 //return right tree node
 TArbre* arbreFilsDroit(TArbre* a){
-    return a->right;
+    return a->droite;
 }
 
 //delete tree
 void arbreSuppr(TArbre* a){
     if(!arbreEstVide(a)){
-        arbreSuppr(a->left);
-        arbreSuppr(a->right);
+        arbreSuppr(a->gauche);
+        arbreSuppr(a->droite);
         free(a);
     }
 }
