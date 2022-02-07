@@ -23,8 +23,8 @@ TArbre* arbreCons(char c, int n, TArbre* fg, TArbre* fd){
     arbre = (TArbre*)malloc(sizeof(TArbre));
     arbre->data=c;
     arbre->nbOcc=n;
-    arbre->droite=fg;
-    arbre->gauche=fd;
+    arbre->droite=fd;
+    arbre->gauche=fg;
     return arbre;
 }
 
