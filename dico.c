@@ -72,15 +72,7 @@ void aff2(TArbre *a)
         aff2(a->droite);
     }
 }
-void aff2(TArbre* a){
-  if (a != NULL){
-    printf("%c aaaaaaaaa %d \n ",a->data, a->nbOcc);
-    
-    //aff2(a->gauche);
-    //printf("Mche Droite \n");
-    aff2(a->droite);
-  }
-}
+
 
 void aff(TArbre *a)
 {
