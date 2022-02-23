@@ -63,25 +63,29 @@ int piocherMot(char *motPioche)
 }
 
 
-
-
-//insert a word in the dictionary
-void dicoInsererMot(char mot[], TArbre* a){
-  if(dicoNbOcc(mot, a) == 0)
-    // Nouveau mot
-    a = dicoInsererNouvMot(mot,a);
-  else
-    // mot exisistant alors incrimenter on occurence
-    dicoNbOccAdd(mot,a);
-
+void aff(TArbre* a){
+  if (a != NULL){
+    printf("%c aaaaaaaaa %d \n ",a->data, a->nbOcc);
+    aff(a->gauche);
+    aff(a->droite);
+  }
 }
+TArbre* dicoBranche(char *mot){
+  if(mot[0] == '\0') return arbreCons('~',1,NULL,NULL);
+  return arbreCons(mot[0],0,dicoBranche(mot+1),NULL);
+}
+
 // Insertion dans le dictionnaire
 TArbre* dicoInsererNouvMot(char mot[], TArbre* a){
     // verifier si l'arbre est nulle
-    if(a == NULL) return arbreConsVide();
+
+    if(a== NULL){
+        return dicoBranche(mot);
+    } 
     /* verifier si le caractere est un caractere de fin de chaine
      si c'est le cas verifier le mot dans la racine*/
     if(mot[0] == '\0') return (a->data == '\0')?a:arbreCons('\0',1,NULL,a);
+
     /* si c'est un nouveau mot construire un nouveau 
       sous arbre contenant le nouveau mot et l'affecter
       au fg*/
@@ -95,34 +99,62 @@ TArbre* dicoInsererNouvMot(char mot[], TArbre* a){
     a->droite = dicoInsererNouvMot(mot, a->droite);
     return a;
 }
-TArbre* dicoBranche(char *mot){
-  if(mot[0] == '\0') return arbreCons('\0',1,NULL,NULL);
-  return arbreCons(mot[0],0,dicoBranche(mot+1),NULL);
+//  Incrementer le nombre d'occurences dans dictionnaire
+void dicoNbOccAdd(char *mot, TArbre* a){
+  // verifier si le mot se trouve à la racine
+  if(*mot == a->data){
+    if(*mot == '\0') a->nbOcc+=1;
+    // incrimenter son occurance
+    return dicoNbOccAdd(mot+1, a->gauche);
+  }
+  // verifier le sous arbre droite
+  return dicoNbOccAdd(mot, a->droite);
+}
+
+
+//insert a word in the dictionary
+void dicoInsererMot(char mot[], TArbre* a){
+  if(dicoNbOcc(mot, a) == 0){
+    // Nouveau mot
+    a = dicoInsererNouvMot(mot,a);
+    aff(a);
+
+  }else
+    // mot exisistant alors incrimenter on occurence
+    dicoNbOccAdd(mot,a);
+
 }
 
 /* ***************************************************************************************************************** */
 
 
 /* *************************************************** Affichage *************************************************** */
-
+ 
 //Afficher tout le dictionnaire
-void dicoAfficher(TArbre* a){
-    static char buffer[100]; // Buffer servant à stocker les mots à écrire
-    static int cur = 0; // Case courante à remplir
+void dicoAfficher(TArbre* a,char *buffer, int *cur){
+    printf("cur %d \n",*cur);
+    printf("Buffer init %s \n",buffer);
     if (a != NULL){
-        buffer[cur++] = a->data;
-        if (a->data == '\0'){
+        buffer[*cur] = a->data;
+        *cur+=1;
+        printf("Buffer: %s \n",buffer);
+    
+        if (a->data == '~'){
             // afficher le mot et son occurence
             printf("\t %s -> [ %d ]\n",buffer,a->nbOcc);
         }
-        else 
-            dicoAfficher(a->gauche);
-        cur--;
-        if (a->droite != NULL)
-            dicoAfficher(a->droite);
+        else {
+
+            dicoAfficher(a->gauche,buffer,cur);
+        }
+        
+        if (a->droite != NULL){
+            //*cur--;
+            dicoAfficher(a->droite,buffer,cur);
+        }
     }
-    else 
-        printf("Dictionnaire est vide \n");
+    /*else 
+        printf("Dictionnaire est vide \n");*/
 }
 /* ***************************************************************************************************************** */
 
@@ -186,17 +218,7 @@ int dicoNbOcc(char *mot, TArbre* a){
   return dicoNbOcc(mot, a->droite);
 }
 
-//  Incrementer le nombre d'occurences dans dictionnaire
-void dicoNbOccAdd(char *mot, TArbre* a){
-  // verifier si le mot se trouve à la racine
-  if(*mot == a->data){
-    if(*mot == '\0') a->nbOcc+=1;
-    // incrimenter son occurance
-    return dicoNbOccAdd(mot+1, a->gauche);
-  }
-  // verifier le sous arbre droite
-  return dicoNbOccAdd(mot, a->droite);
-}
+
 /* ***************************************************************************************************************** */
 
 
