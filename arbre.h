@@ -14,5 +14,5 @@ char arbreRacineLettre(TArbre* a);
 int arbreRacineNbOcc(TArbre* a);
 TArbre* arbreFilsGauche(TArbre* a);
 TArbre* arbreFilsDroit(TArbre* a);
-void arbreSuppr(TArbre* a);
+void arbreSuppr(TArbre** a);
 #endif

@@ -8,14 +8,21 @@
 
 /* *************************************************** Insertion *************************************************** */
 
-//choisir un nimbre aleatoire depuis le dictionnaire
+/**
+ * Choisir un nombre aleatoire depuis le dictionnaire
+ * @param nombreMax
+ * @returns {nombreMax}
+ */
 int nombreAleatoire(int nombreMax)
 {
-    //srand(time(NULL));
     return (rand() % nombreMax);
 }
 
-//choisir un mot aleatoire depuis le dictionnaire
+/**
+ * Choisir un mot aleatoire depuis le dictionnaire
+ * @param motPioche
+ * @returns {1 || 0}
+ */
 int piocherMot(char *motPioche)
 {
     FILE *dico = NULL;
@@ -57,32 +64,15 @@ int piocherMot(char *motPioche)
     // On vire le \n à la fin
     motPioche[strlen(motPioche) - 1] = '\0';
     fclose(dico);
-
+    printf(" mot %s\n", motPioche);
     // Tout s'est bien passé
     return 1;
 }
-void aff2(TArbre *a)
-{
-    if (a != NULL)
-    {
-        printf("%c \n ", a->data);
-        printf("/ \n");
-        aff2(a->gauche);
-        printf("   '\' \n");
-        aff2(a->droite);
-    }
-}
-
-
-void aff(TArbre *a)
-{
-    if (a != NULL)
-    {
-        printf("%c aaaaaaaaa %d \n ", a->data, a->nbOcc);
-        aff(a->gauche);
-        aff(a->droite);
-    }
-}
+/**
+ * Inserer un mot dans une branche
+ * @param char mot[]
+ * @return TArbre *a
+ */
 TArbre *dicoBranche(char mot[])
 {
     if (mot[0] == '\0')
@@ -90,125 +80,129 @@ TArbre *dicoBranche(char mot[])
     return arbreCons(mot[0], 0, dicoBranche(mot + 1), NULL);
 }
 
-// Insertion dans le dictionnaire
+/**
+ * Inserer un mot dans le dictionnaire
+ * @param char mot[]
+ * @param TArbre *a
+ * @return TArbre *
+ */
 TArbre *dicoInsererNouvMot(char mot[], TArbre *a)
 {
     // verifier si l'arbre est nulle
     if (a->data == '\0')
     {
+        // creation d'une branche 
         return dicoBranche(mot);
     }
-    /* verifier si le caractere est un caractere de fin de chaine
-     si c'est le cas verifier le mot dans la racine*/
+    // si le mot pioche est vide
     if (mot[0] == '\0')
+
         return (a->data == '~') ? a : arbreCons('~', 1, NULL, a);
 
-    /* si c'est un nouveau mot construire un nouveau 
-      sous arbre contenant le nouveau mot et l'affecter
-      au fg*/
+    /*  si c'est un nouveau mot et le premier caractere est
+        lexicographiquement plus petit que la racine alors créer
+        une arbre dont la racine est le premier caractere du mot pioche,
+        son fg contiendra le reste et le fd contiendra l'ancienne arbre*/
+
     if ((a->data != '\0') && (mot[0] < a->data))
     {
         return arbreCons(mot[0], 0, dicoBranche(mot + 1), a);
     }
-    /* si le mot commence avec la même lettre */
+
+    /* si le mot commence avec la même lettre alors on doit 
+        avancer dans notre lecture du mot et passer au fg */
     if (mot[0] == a->data)
     {
-        /* l'inserer dans le sous arbre gauche*/
         a->gauche = dicoInsererNouvMot(mot + 1, a->gauche);
         return a;
     }
+    /* on insere dans la partie droite que si le mot lu est 
+        lexicographiquement plus grand que celui dans la racine */
     a->droite = dicoInsererNouvMot(mot, a->droite);
     return a;
 }
-//  Incrementer le nombre d'occurences dans dictionnaire
+/**
+ * Incrementer le nombre d'occurences 
+ * que quand le mot existe dans le dictionnaire
+ * @param char mot[]
+ * @param TArbre **a
+ */
 void dicoNbOccAdd(char *mot, TArbre **a)
 {
     if ((*a)->data == '~')
     {
         (*a)->data = '\0';
     }
-    // verifier si le mot se trouve à la racine
+    
     if (*mot == (*a)->data)
     {
+        /* Si on atteint le caractere de fin de chaine
+         alors le mot existe on incremente son occurence*/
         if (*mot == '\0')
         {
             (*a)->data = '~';
             (*a)->nbOcc += 1;
             return;
         }
-        // incrimenter son occurance
+    
         return dicoNbOccAdd(mot + 1, &((*a)->gauche));
     }
     // verifier le sous arbre droite
     return dicoNbOccAdd(mot, &((*a)->droite));
 }
 
-//insert a word in the dictionary
+/**
+ * Inserer un mot dans le dictionnaire
+ * @param char mot[]
+ * @param TArbre **a
+ */
 void dicoInsererMot(char mot[], TArbre **a)
 {
+    // verifier l'exisistance du mot
     if (dicoNbOcc(mot, *a) == 0)
     {
-        // Nouveau mot
+        // Insertion nouveau mot
         (*a) = dicoInsererNouvMot(mot, *a);
     }
     else
-        // mot exisistant alors incrimenter on occurence
-
+        // mot exisistant --> incrimenter son occurence
         dicoNbOccAdd(mot, a);
 }
 
 /* ***************************************************************************************************************** */
 
 /* *************************************************** Affichage *************************************************** */
-//Afficher tout le dictionnaire
-void dicoAfficherProp(TArbre *a, char *buffer, int *cur)
+/**
+ * Afficher tout le dictionnaire
+ * @param char buffer
+ * @param TArbre *a
+ * @param int *cur
+ */
+void dicoAfficher(TArbre *a, char *buffer, int *cur)
 {
-
+    
     if ((a->data != '\0'))
     {
         buffer[*cur] = a->data;
         *cur += 1;
+        /* si on arrive au CFC on affiche le mot et son nbOcc*/
         if (a->data == '~')
         {
             buffer[*cur - 1] = '\0';
-            // afficher le mot et son occurence
+            
             int motSize = strlen(buffer);
             printf("\t |  %s", buffer);
+            // tabulation
             for (int i = 0; i < 17 - motSize; i++)
             {
                 printf(" ");
             }
+            // afficher le mot et son occurence
             printf("|         %d           |\n", a->nbOcc);
         }
-        else
-        {
-
-            dicoAfficherProp(a->gauche, buffer, cur);
-        }
-        buffer[*cur] = '\0';
-        *cur -= 1;
-        if ((a->droite != NULL))
-        {
-            dicoAfficherProp(a->droite, buffer, cur);
-        }
-    }
-    else
-        printf("Dictionnaire est vide \n");
-}
-//Afficher tout le dictionnaire
-void dicoAfficher(TArbre *a, char *buffer, int *cur)
-{
-
-    if ((a->data != '\0'))
-    {
-        buffer[*cur] = a->data;
-        *cur += 1;
-        if (a->data == '~')
-        {
-            buffer[*cur - 1] = '\0';
-            // afficher le mot et son occurence
-            printf("\t %s -> [ %d ]\n", buffer, a->nbOcc);
-        }
+        /* L'afficge est lexicographique on commence
+        par afficher la partie gauche de l'arbre tant qu'elle est definit
+        sinon on bascule vers le fd si il existe*/
         else
         {
 
@@ -216,6 +210,7 @@ void dicoAfficher(TArbre *a, char *buffer, int *cur)
         }
         buffer[*cur] = '\0';
         *cur -= 1;
+
         if ((a->droite != NULL))
         {
             dicoAfficher(a->droite, buffer, cur);
@@ -224,17 +219,22 @@ void dicoAfficher(TArbre *a, char *buffer, int *cur)
     else
         printf("Dictionnaire est vide \n");
 }
+
 /* ***************************************************************************************************************** */
 
 /* *************************************************** Statistiques *************************************************** */
-// Trouver le nombre de mots differents
+/**
+ * Trouver le nombre de mots differents
+ * @param TArbre *a
+ * @return int
+ */
 int dicoNbMotsDifferents(TArbre *a)
 {
     static int NbMotsDifferents = 0;
     if (a != NULL)
     {
-        /* incrimenter à chaque fois qu'on
-          atteint la fin de chaine */
+        /* Incrimenter le compteur que si 
+        on atteint CFC*/
         if (a->data == '~')
         {
             NbMotsDifferents++;
@@ -249,7 +249,11 @@ int dicoNbMotsDifferents(TArbre *a)
     return NbMotsDifferents;
 }
 
-// Trouver le nombre total de mots
+/**
+ * Trouver le nombre total de mots 
+ * @param TArbre *a
+ * @return int
+ */
 int dicoNbMotsTotal(TArbre *a)
 {
     static int NbMotsTotal = 0;
@@ -257,8 +261,8 @@ int dicoNbMotsTotal(TArbre *a)
     {
         if (a->data == '~')
         {
-            /* incrimenter le compteur à chaque fois
-             qu'on atteint la fin de chaine */
+            /* Lorsqu'on atteint le CFC on somme 
+            sur le nbOcc */
             NbMotsTotal += a->nbOcc;
         }
         else
@@ -274,16 +278,21 @@ int dicoNbMotsTotal(TArbre *a)
 
 /* *************************************************** Exist + Occ *************************************************** */
 
-//Trouver le nombre d'occurences dans le dictionnaire
+/**
+ * Trouver le nombre d'occurence das le dictionnaire
+ * @param char mot[]
+ * @param TArbre *a
+ * @return int
+ */
 int dicoNbOcc(char mot[], TArbre *a)
 {
-    /* le mot se trouve dans la racine*/
     if (a->data == '~')
     {
         a->data = '\0';
     }
     if ((*mot == a->data))
     {
+        /* si on atteint le CFC on retourne le nbOcc*/
         if (*mot == '\0')
         {
             a->data = '~';
@@ -292,9 +301,7 @@ int dicoNbOcc(char mot[], TArbre *a)
         return dicoNbOcc(mot + 1, a->gauche);
     }
 
-    /* verifier si l'arbre est vide ou le mot < à la racine
-  càd qu'il est nouveau puisque l'insertion est dans 
-  l'ordre alphabetique */
+    /* si l'arbre est vide ou si c'est un nouveau mot retourner 0*/
     if ((a->data == '\0') || (mot[0] < a->data))
     {
         return 0;
@@ -304,7 +311,6 @@ int dicoNbOcc(char mot[], TArbre *a)
     return dicoNbOcc(mot, a->droite);
 }
 
-/* ******************************************** Mgaaa7ef ******************************************************** */
 #define COUNT 10
 #define MAX_HEIGHT 1000
 
@@ -447,7 +453,7 @@ void compute_edge_lengths(asciinode *node)
     compute_edge_lengths(node->gauche);
     compute_edge_lengths(node->droite);
 
-    /* first fill in the edge_length of node */
+    /* remplir  edge_length d noeud */
     if (node->droite == NULL && node->gauche == NULL)
     {
         node->edge_length = 0;
@@ -486,7 +492,7 @@ void compute_edge_lengths(asciinode *node)
             delta = MAX(delta, gap + 1 + rprofile[i] - lprofile[i]);
         }
 
-        //If the node has two children of height 1, then we allow the
+        // If the node has two children of height 1, then we allow the
         //two leaves to be within 1, instead of 2
         if (((node->gauche != NULL && node->gauche->height == 1) ||
              (node->droite != NULL && node->droite->height == 1)) &&
@@ -667,7 +673,7 @@ void print_levelInsert(asciinode *node, int x, int level, char *mot)
        // printf("!!!! nbOcc Node= %d \n",node->nbOcc);
         printf("\033[107m");
         system("setterm -bold on");
-        if ((node->nbOcc != 0) && (node->label != "~"))
+        if ((node->label != "~") && (node->nbOcc != 0))
         {
             printf("\033[1;31m"); //red
             
@@ -800,4 +806,5 @@ void print_ascii_treeInsert(TArbre *t, char *mot)
                100);
     }
     free_ascii_tree(proot);
+
 }

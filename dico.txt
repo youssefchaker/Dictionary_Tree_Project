@@ -1,7 +1,7 @@
 ange
 baleine
 brindille
-brume
+hate
 chaleur
 chaussettes
 citronnade
@@ -30,7 +30,7 @@ sirene
 sortable
 tournesol
 enterrement
-cyclope
+cercle
 les
 londres
 barricade
@@ -89,7 +89,7 @@ avant
 laine
 cendrier
 musique
-bleu
+balade
 remplir
 angles
 infection

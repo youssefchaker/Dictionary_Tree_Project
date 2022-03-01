@@ -3,6 +3,7 @@
 #include <string.h>
 #include "dico.h"
 #include "arbre.h"
+#include <time.h>
 
 int main(int argc, char* argv[]){
     printf("\n");
@@ -102,7 +103,7 @@ int main(int argc, char* argv[]){
     printf("\t ¤-------------------¤---------------------¤\n");
     printf("\t |        Mot        |  Nombre d'occurance |\n");
     printf("\t ¤-------------------¤---------------------¤\n");
-    dicoAfficherProp(dico,bufferAff,&cur);
+    dicoAfficher(dico,bufferAff,&cur);
     printf("\t ¤-------------------¤---------------------¤\n");
     printf("\n");
     system("setterm -bold on");
@@ -110,4 +111,6 @@ int main(int argc, char* argv[]){
     system("setterm -bold off");
     printf("Sous la forme d'une arbre : \n");
     print_ascii_tree(dico);
+    arbreSuppr(&dico);
+    return 0;
 }

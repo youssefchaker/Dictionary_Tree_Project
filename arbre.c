@@ -5,19 +5,33 @@
 
 #include "arbre.h"
 
-//create empty tree
+/**
+ * Créer une arbre vide
+ * @return TArbre *a
+ */
 TArbre* arbreConsVide(){
     TArbre* empty;
     empty = (TArbre*) malloc(sizeof(TArbre));
     return empty;
 }
-//test if the tree is empty or not
+/**
+ * Verifier si l'arbre est vide
+ * @param TArbre *a
+ * @return int 
+ */
 int arbreEstVide(TArbre* a){
     if(a == arbreConsVide())
         return 1;
     return 0;
 }
-//create a tree 
+/**
+ * Créer une arbre 
+ * @param char c
+ * @param int n
+ * @param TArbre* fg
+ * @param TArbre* fd
+ * @return TArbre *a
+ */ 
 TArbre* arbreCons(char c, int n, TArbre* fg, TArbre* fd){
     TArbre* arbre;
     arbre = (TArbre*)malloc(sizeof(TArbre));
@@ -28,31 +42,55 @@ TArbre* arbreCons(char c, int n, TArbre* fg, TArbre* fd){
     return arbre;
 }
 
-//retrun node data
+/**
+ * Retourner la lettre stocker dans la racine 
+ * @param TArbre* a
+ * @return char 
+ */ 
 char arbreRacineLettre(TArbre* a){
     return a->data;
 }
 
-//return nb occ
+/**
+ * Retourner le nbOcc de la racine 
+ * @param TArbre* a
+ * @return int
+ */ 
 int arbreRacineNbOcc(TArbre* a){
     return a->nbOcc;
 }
 
-//return left tree node
+/**
+ * Retourner le fils gauche 
+ * @param TArbre* a
+ * @return c
+ */ 
 TArbre* arbreFilsGauche(TArbre* a){
     return a->gauche;
 }
 
-//return right tree node
+/**
+ * Retourner le fils droit
+ * @param TArbre* a
+ * @return TArbre* 
+ */ 
 TArbre* arbreFilsDroit(TArbre* a){
     return a->droite;
 }
 
-//delete tree
-void arbreSuppr(TArbre* a){
-    if(!arbreEstVide(a)){
-        arbreSuppr(a->gauche);
-        arbreSuppr(a->droite);
-        free(a);
+/**
+ *  Supprimer l'arbre
+ * @param TArbre* a
+ */ 
+void arbreSuppr(TArbre** a){
+    if((*a)->data != '\0'){
+
+        if((*a)->gauche)
+        arbreSuppr(&((*a)->gauche));
+
+        if((*a)->droite)
+        arbreSuppr(&((*a)->droite));
+        
+        free(*a);
     }
 }
