@@ -64,7 +64,6 @@ int piocherMot(char *motPioche)
     // On vire le \n à la fin
     motPioche[strlen(motPioche) - 1] = '\0';
     fclose(dico);
-    printf(" mot %s\n", motPioche);
     // Tout s'est bien passé
     return 1;
 }
@@ -234,7 +233,7 @@ int dicoNbMotsDifferents(TArbre *a)
     if (a != NULL)
     {
         /* Incrimenter le compteur que si 
-        on atteint CFC*/
+        on atteint Caractere de fin de Chaine*/
         if (a->data == '~')
         {
             NbMotsDifferents++;
@@ -261,8 +260,8 @@ int dicoNbMotsTotal(TArbre *a)
     {
         if (a->data == '~')
         {
-            /* Lorsqu'on atteint le CFC on somme 
-            sur le nbOcc */
+            /* Lorsqu'on atteint le Caractere de fin de Chaine
+            on somme sur le nbOcc */
             NbMotsTotal += a->nbOcc;
         }
         else
@@ -292,7 +291,8 @@ int dicoNbOcc(char mot[], TArbre *a)
     }
     if ((*mot == a->data))
     {
-        /* si on atteint le CFC on retourne le nbOcc*/
+        /* si on atteint le Caractere de fin de Chaine
+        on retourne le nbOcc*/
         if (*mot == '\0')
         {
             a->data = '~';
@@ -310,7 +310,9 @@ int dicoNbOcc(char mot[], TArbre *a)
     // verifier le sous arbre droite
     return dicoNbOcc(mot, a->droite);
 }
+/* ***************************************************************************************************************** */
 
+/* ********************************************* Simulation de l'arbre *************************************************** */
 #define COUNT 10
 #define MAX_HEIGHT 1000
 
@@ -453,7 +455,7 @@ void compute_edge_lengths(asciinode *node)
     compute_edge_lengths(node->gauche);
     compute_edge_lengths(node->droite);
 
-    /* remplir  edge_length d noeud */
+    /* remplir  edge_length du noeud */
     if (node->droite == NULL && node->gauche == NULL)
     {
         node->edge_length = 0;
